@@ -1,5 +1,4 @@
 import pickle
-
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -14,11 +13,11 @@ def sigmoid_derivative(x):
     return x * (1 - x)
 
 
-# Определение класса нейронной сети
+# определение класса нейронной сети
 class NeuralNetwork:
 
     def forward(self, x):
-        # Прямое распространение
+        # прямое распространение
         self.hidden_input = np.dot(x, self.weights_input_hidden) + self.bias_input_hidden
         self.hidden_output = sigmoid(self.hidden_input)
 
@@ -38,7 +37,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-# Определение меток
+# определение меток
 labels_dict = {0: '1', 1: '2', 2: '3', 3: '4', 4: '5', 5: '6', 6: '7', 7: '8', 8: '9'}
 
 while True:
@@ -48,8 +47,7 @@ while True:
     y_ = []
 
     ret, frame = cap.read()
-    # Отзеркаливание кадра по горизонтали
-    frame = cv2.flip(frame, 1)
+    frame = cv2.flip(frame, 1) # отзеркаливание кадра по горизонтали
 
     H, W, _ = frame.shape
 
@@ -81,7 +79,7 @@ while True:
         x2 = int(max(x_) * W) - 10
         y2 = int(max(y_) * H) - 10
 
-        # Предсказание
+        # предсказание
         prediction = model.forward([np.asarray(data_aux)])
         max_index = np.argmax(prediction[0])
         predicted_character = list(labels_dict.values())[max_index]
