@@ -21,20 +21,22 @@ for dir_ in os.listdir(DATA_DIR):
         img = cv2.imread(os.path.join(DATA_DIR, dir_, img_path))
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        results = hands.process(img_rgb)
+        results = hands.process(img_rgb) # выделение руки на изображении
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
                 for i in range(len(hand_landmarks.landmark)):
-                    x = hand_landmarks.landmark[i].x
-                    y = hand_landmarks.landmark[i].y
+                    x = hand_landmarks.landmark[i].x # координата х маркера
+                    y = hand_landmarks.landmark[i].y # координата у маркера
 
                     data_aux.append(x)
                     data_aux.append(y)
 
-            data.append(data_aux)
-            label_array = np.zeros(9, dtype=float)  # Создаем массив из 3 ячеек, заполненных нулями
-            label_index = int(dir_)  # Получаем индекс метки из имени директории
-            label_array[label_index] = 1.0  # Устанавливаем 1.0 в соответствующей ячейке
+            data.append(data_aux) # запись координат маркера
+
+            # создание метки
+            label_array = np.zeros(9, dtype=float)  # создаем массив из 3 ячеек, заполненных нулями
+            label_index = int(dir_)  # получаем индекс метки из имени директории
+            label_array[label_index] = 1.0  # устанавливаем 1.0 в соответствующей ячейке
             labels.append(label_array)
 
 f = open('data.pickle', 'wb')
